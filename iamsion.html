@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="ko" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to My Space!</title>
+    <!-- Pretendard Font CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        spaceNavy: '#172554',
+                        spaceDark: '#0b132b',
+                        accentBlue: '#3b82f6',
+                        planetProfile: '#38bdf8',
+                        planetHobby: '#fb923c',
+                        planetTech: '#2dd4bf',
+                        planetAnimal: '#34d399',
+                        planetOther: '#c084fc'
+                    },
+                    fontFamily: {
+                        sans: ['Pretendard', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Pretendard', sans-serif;
+            background-color: #172554;
+            color: #f8fafc;
+            overflow-x: hidden;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #172554;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #3b82f6;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #60a5fa;
+        }
+
+        /* Glassmorphism Classes */
+        .glass-panel {
+            background: rgba(23, 37, 84, 0.45);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-4px);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Planet Orbit Lines */
+        .orbit-ring {
+            border: 1px dashed rgba(255, 255, 255, 0.12);
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+
+        /* Planet Floating Animation */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(2deg); }
+        }
+
+        .floating-planet {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* Pulse Glowing Effect */
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 15px rgba(59, 130, 246, 0.4); }
+            50% { box-shadow: 0 0 35px rgba(59, 130, 246, 0.8); }
+        }
+
+        .planet-glow {
+            animation: pulseGlow 4s infinite alternate;
+        }
+
+        /* Star Dust Layer */
+        #stars-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body class="relative min-h-screen selection:bg-blue-600 selection:text-white">
+
+    <!-- Starry background Canvas covering the whole page -->
+    <canvas id="stars-canvas"></canvas>
+
+    <!-- 1) Hero Section -->
+    <section id="hero" class="relative z-10 w-full h-screen flex flex-col justify-center items-center px-4 overflow-hidden">
+        <!-- Floating Ambient Glows -->
+        <div class="absolute w-96 h-96 bg-blue-900/30 rounded-full blur-3xl top-1/4 left-1/4 pointer-events-none"></div>
+        <div class="absolute w-96 h-96 bg-purple-900/20 rounded-full blur-3xl bottom-1/4 right-1/4 pointer-events-none"></div>
+
+        <div class="text-center max-w-3xl space-y-6 md:space-y-8 animate-fade-in">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card text-xs md:text-sm font-medium tracking-wide text-blue-300 mb-2">
+                <span class="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
+                🪐 우리 팀 동료들을 위한 아주 특별한 아지트
+            </div>
+            
+            <h1 class="text-4xl sm:text-6xl md:text-8xl font-black tracking-tight leading-none bg-gradient-to-r from-white via-blue-100 to-blue-400 bg-clip-text text-transparent filter drop-shadow-[0_5px_15px_rgba(0,0,0,0.5)]">
+                Welcome to<br class="block sm:hidden"> my space! ✨
+            </h1>
+
+            <p class="text-base sm:text-lg md:text-xl text-blue-100/80 font-normal leading-relaxed max-w-2xl mx-auto px-4">
+                안녕하세요, 든든하고 소중한 우리 팀 동료 여러분! <br class="hidden sm:block">
+                저의 은하계에 오신 것을 진심으로 환영합니다. <br class="hidden sm:block">
+                서로 더 가까워지고 싶은 마음을 담아 저만의 신비로운 은하 공간을 준비했어요. <br>
+                행성들을 탐험하며 저에 대해 조금 더 알아가 보실래요? 🚀
+            </p>
+
+            <div class="pt-4">
+                <a href="#galaxy-map-section" class="inline-flex items-center gap-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold py-4 px-8 rounded-full shadow-lg shadow-blue-900/40 hover:shadow-blue-500/30 transform hover:-translate-y-1 transition-all duration-300 group">
+                    <span>우주 탐사 시작하기</span>
+                    <i class="fa-solid fa-arrow-down transition-transform group-hover:translate-y-1"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-xs text-blue-200/50">
+            <span class="tracking-widest uppercase">Scroll Down</span>
+            <div class="w-6 h-10 border-2 border-blue-200/30 rounded-full flex justify-center p-1">
+                <div class="w-1.5 h-1.5 bg-blue-300 rounded-full animate-bounce"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2) Interactive Galaxy Map Section -->
+    <section id="galaxy-map-section" class="relative z-10 w-full h-screen min-h-[700px] flex flex-col justify-between items-center py-12 px-4 relative overflow-hidden bg-slate-950/40 border-t border-white/5">
+        
+        <!-- Section Header -->
+        <div class="text-center z-10 space-y-2 select-none">
+            <h2 class="text-2xl sm:text-4xl font-extrabold text-white tracking-tight">🪐 나의 은하 지도 (Galaxy Map)</h2>
+            <p class="text-sm sm:text-base text-slate-300/80">궁금한 분야의 행성을 클릭하여 더 깊은 우주 속으로 탐험을 시작하세요.</p>
+        </div>
+
+        <!-- Orbit Background Container -->
+        <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-30">
+            <div class="orbit-ring w-[300px] h-[300px]"></div>
+            <div class="orbit-ring w-[500px] h-[500px]"></div>
+            <div class="orbit-ring w-[700px] h-[700px]"></div>
+            <div class="orbit-ring w-[950px] h-[950px]"></div>
+        </div>
+
+        <!-- Center Star (The Core) -->
+        <div id="galaxy-container" class="relative w-full max-w-5xl h-[65%] flex items-center justify-center transition-transform duration-1000 ease-out transform-gpu">
+            
+            <!-- Sun / Central Core (2x scaled up) -->
+            <div class="absolute w-36 h-36 rounded-full bg-gradient-to-r from-amber-400 to-red-500 filter blur-[1px] shadow-[0_0_60px_#f59e0b] flex items-center justify-center select-none cursor-default z-10">
+                <span class="text-base font-bold text-amber-950 animate-pulse">MY CORE</span>
+            </div>
+
+            <!-- Planet 1: Profile Planet (지구형 - 하늘색, 2x scaled up) -->
+            <button onclick="zoomToPlanet('planet-profile', 0)" class="planet-btn absolute flex flex-col items-center group cursor-pointer transform -translate-x-1/2 -translate-y-1/2 transition-transform duration-500 hover:scale-110" style="left: 20%; top: 30%;">
+                <div class="w-32 h-32 sm:w-40 sm:h-40 rounded-full bg-gradient-to-br from-cyan-300 via-sky-500 to-blue-700 shadow-[0_0_40px_rgba(14,165,233,0.4)] flex items-center justify-center text-white text-4xl sm:text-5xl floating-planet select-none group-hover:shadow-[0_0_60px_rgba(14,165,233,0.8)] relative">
+                    <i class="fa-solid fa-user-astronaut"></i>
+                    <!-- Pulse glow border -->
+                    <div class="absolute inset-0 rounded-full border-4 border-sky-300/30 scale-125 animate-ping opacity-25"></div>
+                </div>
+                <span class="mt-4 px-4 py-1.5 rounded-full bg-sky-950/80 border border-sky-500/30 text-xs sm:text-sm font-semibold tracking-wide text-sky-200 group-hover:bg-sky-500 group-hover:text-white transition-colors duration-300">
+                    1. 프로필 행성
+                </span>
+            </button>
+
+            <!-- Planet 2: Hobby Planet (토성 느낌 - 주황, 2x scaled up) -->
+            <button onclick="zoomToPlanet('planet-hobby', 1)" class="planet-btn absolute flex flex-col items-center group cursor-pointer transform -translate-x-1/2 -translate-y-1/2 transition-transform duration-500 hover:scale-110" style="left: 80%; top: 25%;">
+                <div class="w-32 h-32 sm:w-40 sm:h-40 rounded-full bg-gradient-to-br from-amber-300 via-orange-500 to-red-600 shadow-[0_0_40px_rgba(249,115,22,0.4)] flex items-center justify-center text-white text-4xl sm:text-5xl floating-planet select-none group-hover:shadow-[0_0_60px_rgba(249,115,22,0.8)] relative" style="animation-delay: -1.5s;">
+                    <!-- Planet Ring Decorative -->
+                    <div class="absolute w-[160%] h-[20%] border-4 border-amber-300/50 rounded-full transform -rotate-12 pointer-events-none"></div>
+                    <i class="fa-solid fa-gamepad"></i>
+                    <div class="absolute inset-0 rounded-full border-4 border-orange-300/30 scale-125 animate-ping opacity-25" style="animation-delay: 0.5s;"></div>
+                </div>
+                <span class="mt-5 px-4 py-1.5 rounded-full bg-orange-950/80 border border-orange-500/30 text-xs sm:text-sm font-semibold tracking-wide text-orange-200 group-hover:bg-orange-500 group-hover:text-white transition-colors duration-300">
+                    2. 취미 행성
+                </span>
+            </button>
+
+            <!-- Planet 3: Tech Planet (링이 있는 테크 스타 - 청록, 2x scaled up) -->
+            <button onclick="zoomToPlanet('planet-tech', 2)" class="planet-btn absolute flex flex-col items-center group cursor-pointer transform -translate-x-1/2 -translate-y-1/2 transition-transform duration-500 hover:scale-110" style="left: 45%; top: 75%;">
+                <div class="w-36 h-36 sm:w-44 sm:h-44 rounded-full bg-gradient-to-br from-teal-300 via-emerald-500 to-teal-800 shadow-[0_0_40px_rgba(45,212,191,0.4)] flex items-center justify-center text-white text-4xl sm:text-5xl floating-planet select-none group-hover:shadow-[0_0_60px_rgba(45,212,191,0.8)] relative" style="animation-delay: -3s;">
+                    <i class="fa-solid fa-laptop-code"></i>
+                    <div class="absolute inset-0 rounded-full border-4 border-teal-300/30 scale-125 animate-ping opacity-25" style="animation-delay: 1s;"></div>
+                </div>
+                <span class="mt-4 px-4 py-1.5 rounded-full bg-teal-950/80 border border-teal-500/30 text-xs sm:text-sm font-semibold tracking-wide text-teal-200 group-hover:bg-teal-500 group-hover:text-white transition-colors duration-300">
+                    3. 기술 행성
+                </span>
+            </button>
+
+            <!-- Planet 4: Animal Planet (초록빛 생명력 - 민트/그린, 2x scaled up) -->
+            <button onclick="zoomToPlanet('planet-animal', 3)" class="planet-btn absolute flex flex-col items-center group cursor-pointer transform -translate-x-1/2 -translate-y-1/2 transition-transform duration-500 hover:scale-110" style="left: 15%; top: 70%;">
+                <div class="w-32 h-32 sm:w-40 sm:h-40 rounded-full bg-gradient-to-br from-emerald-300 via-green-500 to-emerald-700 shadow-[0_0_40px_rgba(52,211,153,0.4)] flex items-center justify-center text-white text-4xl sm:text-5xl floating-planet select-none group-hover:shadow-[0_0_60px_rgba(52,211,153,0.8)] relative" style="animation-delay: -4.5s;">
+                    <i class="fa-solid fa-paw"></i>
+                    <div class="absolute inset-0 rounded-full border-4 border-emerald-300/30 scale-125 animate-ping opacity-25" style="animation-delay: 1.5s;"></div>
+                </div>
+                <span class="mt-4 px-4 py-1.5 rounded-full bg-emerald-950/80 border border-emerald-500/30 text-xs sm:text-sm font-semibold tracking-wide text-emerald-200 group-hover:bg-emerald-500 group-hover:text-white transition-colors duration-300">
+                    4. 동물 행성
+                </span>
+            </button>
+
+            <!-- Planet 5: Other Planet (신비한 보랏빛 행성 - 자수정, 2x scaled up) -->
+            <button onclick="zoomToPlanet('planet-other', 4)" class="planet-btn absolute flex flex-col items-center group cursor-pointer transform -translate-x-1/2 -translate-y-1/2 transition-transform duration-500 hover:scale-110" style="left: 75%; top: 65%;">
+                <div class="w-32 h-32 sm:w-40 sm:h-40 rounded-full bg-gradient-to-br from-fuchsia-300 via-purple-500 to-violet-800 shadow-[0_0_40px_rgba(192,132,252,0.4)] flex items-center justify-center text-white text-4xl sm:text-5xl floating-planet select-none group-hover:shadow-[0_0_60px_rgba(192,132,252,0.8)] relative" style="animation-delay: -2s;">
+                    <i class="fa-solid fa-comment-dots"></i>
+                    <div class="absolute inset-0 rounded-full border-4 border-purple-300/30 scale-125 animate-ping opacity-25" style="animation-delay: 2s;"></div>
+                </div>
+                <span class="mt-4 px-4 py-1.5 rounded-full bg-purple-950/80 border border-purple-500/30 text-xs sm:text-sm font-semibold tracking-wide text-purple-200 group-hover:bg-purple-500 group-hover:text-white transition-colors duration-300">
+                    5. 자유 행성
+                </span>
+            </button>
+
+        </div>
+
+        <!-- Footnote / Guide -->
+        <div class="text-center z-10 text-xs sm:text-sm text-slate-400 select-none pb-4">
+            <p>💡 <span class="text-blue-300">PC 및 모바일 환경</span>에서 모두 원활히 동작합니다. 행성을 꾹 터치하거나 눌러주세요!</p>
+        </div>
+    </section>
+
+    <!-- Detail Drawer/Modal Container (Hidden initially) -->
+    <div id="detail-overlay" class="fixed inset-0 z-50 pointer-events-none flex items-center justify-end p-0 md:p-6 transition-all duration-500">
+        <!-- Backdrop -->
+        <div id="detail-backdrop" onclick="resetZoom()" class="absolute inset-0 bg-slate-950/80 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-500"></div>
+
+        <!-- Glass Detail Panel sliding from right (Desktop) or bottom (Mobile) -->
+        <div id="detail-panel" class="relative w-full h-[85vh] md:h-full md:max-w-2xl glass-panel md:rounded-3xl rounded-t-3xl shadow-2xl flex flex-col translate-y-full md:translate-y-0 md:translate-x-full transition-transform duration-500 ease-out z-10 pointer-events-auto">
+            
+            <!-- Top Color Stripe and Close button -->
+            <div class="p-6 pb-2 flex justify-between items-center border-b border-white/10">
+                <div class="flex items-center gap-3">
+                    <div id="panel-color-indicator" class="w-4 h-4 rounded-full animate-pulse"></div>
+                    <span id="panel-category" class="text-xs uppercase tracking-widest font-bold text-slate-400">PLANET CATEGORY</span>
+                </div>
+                <button onclick="resetZoom()" class="text-slate-400 hover:text-white hover:bg-white/10 px-3 py-1.5 rounded-lg text-sm transition-all flex items-center gap-2 border border-white/5 bg-white/5 shadow-inner">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    <span>지도로 돌아가기</span>
+                </button>
+            </div>
+
+            <!-- Content Container (Scrollable) -->
+            <div id="panel-content" class="flex-1 overflow-y-auto p-6 md:p-8 space-y-6">
+                <!-- Planet content dynamically inserted here -->
+            </div>
+
+            <!-- Panel Footer message -->
+            <div class="p-4 bg-slate-950/40 text-center text-xs text-slate-400/70 border-t border-white/5">
+                ✦ 함께 성장하며 즐겁게 소통하고 싶습니다. 커피 한잔 언제든 환영해요! ☕
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data for each planet containing rich detail written in a friendly, respectful tone
+        const planetsData = [
+            {
+                // Planet 1: Profile
+                category: "1. 프로필 행성",
+                color: "bg-planetProfile",
+                themeText: "text-sky-300",
+                themeBorder: "border-sky-500/20",
+                themeBg: "bg-sky-500/10",
+                html: `
+                    <div class="space-y-6">
+                        <div class="flex items-center gap-4">
+                            <div class="w-16 h-16 rounded-full bg-gradient-to-tr from-sky-400 to-blue-600 flex items-center justify-center text-3xl shadow-lg shadow-sky-500/30">
+                                <i class="fa-solid fa-user-astronaut text-white"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl sm:text-3xl font-black text-white">개발자 이은하</h3>
+                                <p class="text-sky-300 font-semibold text-sm">Frontend Developer</p>
+                            </div>
+                        </div>
+
+                        <p class="text-slate-200 leading-relaxed text-base">
+                            안녕하세요, 동료 여러분! 기획을 아름답고 편리한 웹 서비스로 구현하는 프론트엔드 개발자 <strong>이은하</strong>입니다. 팀의 활력소이자 안정적인 구현력을 갖춘 든든한 파트너가 되고 싶어 이 은하계를 탐색 지도로 디자인해보았습니다.
+                        </p>
+
+                        <!-- Profile Specs Grid -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="glass-card p-4 rounded-xl">
+                                <div class="text-xs text-sky-400 font-medium">열정이 가득한 나이</div>
+                                <div class="text-lg font-bold text-white mt-1">뜨거운 20대 후반 🔥</div>
+                            </div>
+                            <div class="glass-card p-4 rounded-xl">
+                                <div class="text-xs text-sky-400 font-medium">협업 MBTI 유형</div>
+                                <div class="text-lg font-bold text-white mt-1">ENFP (재기발랄한 활동가)</div>
+                            </div>
+                            <div class="glass-card p-4 rounded-xl">
+                                <div class="text-xs text-sky-400 font-medium">우리 팀 내 역할</div>
+                                <div class="text-lg font-bold text-white mt-1">디테일 깎는 인터랙션 메이커</div>
+                            </div>
+                            <div class="glass-card p-4 rounded-xl">
+                                <div class="text-xs text-sky-400 font-medium">가장 좋아하는 근무 파트너</div>
+                                <div class="text-lg font-bold text-white mt-1">바로 여러분! 🥰</div>
+                            </div>
+                        </div>
+
+                        <!-- Mini Message Board -->
+                        <div class="p-5 rounded-2xl bg-sky-500/10 border border-sky-500/20 space-y-3">
+                            <h4 class="font-bold text-sky-200 flex items-center gap-2">
+                                <i class="fa-solid fa-heart"></i>
+                                팀 동료분들께 전하는 소망
+                            </h4>
+                            <p class="text-sm text-slate-300 leading-relaxed">
+                                "코드의 깔끔함과 더불어 사용자 관점의 미려한 디테일을 고민하는 것을 좋아해요. 일하면서 어려운 문제나 멋진 의견이 있으실 땐 주저 말고 노크해주세요! 기꺼이 달려가 힘을 보태겠습니다."
+                            </p>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                // Planet 2: Hobby
+                category: "2. 취미 행성",
+                color: "bg-planetHobby",
+                themeText: "text-orange-300",
+                themeBorder: "border-orange-500/20",
+                themeBg: "bg-orange-500/10",
+                html: `
+                    <div class="space-y-6">
+                        <div class="flex items-center gap-4">
+                            <div class="w-16 h-16 rounded-full bg-gradient-to-tr from-amber-400 to-red-600 flex items-center justify-center text-3xl shadow-lg shadow-orange-500/30">
+                                <i class="fa-solid fa-gamepad text-white"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl sm:text-3xl font-black text-white">은하의 오프길</h3>
+                                <p class="text-orange-300 font-semibold text-sm">행복 에너지를 가득 채우는 일상의 궤도</p>
+                            </div>
+                        </div>
+
+                        <p class="text-slate-200 leading-relaxed">
+                            매력적인 결과물을 도출하기 위해 업무 시간에는 누구보다 치열하게 집중하지만, 퇴근 후와 주말에는 다채로운 일상 활동을 통해 영감을 얻고 재충전하는 시간을 가집니다!
+                        </p>
+
+                        <!-- Hobbies list -->
+                        <div class="space-y-4">
+                            <!-- Hobby 1 -->
+                            <div class="glass-card p-4 rounded-xl flex gap-4 items-start">
+                                <div class="w-10 h-10 rounded-lg bg-orange-500/20 flex items-center justify-center text-orange-400 shrink-0">
+                                    <i class="fa-solid fa-mug-hot text-lg"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-white text-base">홈바리스타 드립 커피 ☕</h4>
+                                    <p class="text-sm text-slate-300 mt-1">
+                                        매주 전국 유수의 로스터리 샵에서 원두를 직접 주문하여 향긋한 핸드드립 커피를 연구하며 아침을 엽니다. 취향을 공유해 주시면 동료 여러분께 딱 맞는 완벽한 한 잔의 원두를 추천해 드릴게요!
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Hobby 2 -->
+                            <div class="glass-card p-4 rounded-xl flex gap-4 items-start">
+                                <div class="w-10 h-10 rounded-lg bg-orange-500/20 flex items-center justify-center text-orange-400 shrink-0">
+                                    <i class="fa-solid fa-mountain text-lg"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-white text-base">짜릿한 중력 극복, 실내 클라이밍 🧗</h4>
+                                    <p class="text-sm text-slate-300 mt-1">
+                                        일주일에 2번씩은 꼭 클라이밍 장으로 출근해요! 까다로운 문제 루트를 풀어나갈 때 느껴지는 성취감이 코딩 문제 해결 시의 쾌감과 매우 닮아있답니다. 우리 함께 클라이밍 파티 만들어볼까요?
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Hobby 3 -->
+                            <div class="glass-card p-4 rounded-xl flex gap-4 items-start">
+                                <div class="w-10 h-10 rounded-lg bg-orange-500/20 flex items-center justify-center text-orange-400 shrink-0">
+                                    <i class="fa-solid fa-keyboard text-lg"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-white text-base">키보드 커스텀 및 빌드 ⌨️</h4>
+                                    <p class="text-sm text-slate-300 mt-1">
+                                        스위치 윤활부터 폼 떡칠 빌드까지, 귀가 즐거운 타건음을 위해 키보드를 튜닝하는 취미를 가졌습니다. 현재 사무실에서 보글보글 매력적인 무접점/저소음축 키보드로 기분 좋게 코딩 중이랍니다.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                // Planet 3: Tech
+                category: "3. 기술 행성",
+                color: "bg-planetTech",
+                themeText: "text-teal-300",
+                themeBorder: "border-teal-500/20",
+                themeBg: "bg-teal-500/10",
+                html: `
+                    <div class="space-y-6">
+                        <div class="flex items-center gap-4">
+                            <div class="w-16 h-16 rounded-full bg-gradient-to-tr from-teal-400 to-emerald-600 flex items-center justify-center text-3xl shadow-lg shadow-teal-500/30">
+                                <i class="fa-solid fa-laptop-code text-white"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl sm:text-3xl font-black text-white">기술의 중력장</h3>
+                                <p class="text-teal-300 font-semibold text-sm">완벽하고 견고한 UI/UX 구현 능력</p>
+                            </div>
+                        </div>
+
+                        <p class="text-slate-200 leading-relaxed">
+                            사용자가 서비스를 접하는 첫 접점인 '화면'을 개발하며 고품질의 퍼포먼스와 유지보수성이 뛰어난 컴포넌트 아키텍처 설계를 가장 진지하게 고민합니다.
+                        </p>
+
+                        <!-- Tech Skills Progress Section -->
+                        <div class="space-y-4">
+                            <!-- Skill 1 -->
+                            <div class="glass-card p-4 rounded-xl">
+                                <div class="flex justify-between items-center mb-1">
+                                    <span class="font-bold text-white flex items-center gap-2">
+                                        <i class="fa-brands fa-html5 text-orange-400"></i> HTML5 / CSS3 / Vanilla JS
+                                    </span>
+                                    <span class="text-xs text-teal-300 bg-teal-950 px-2 py-0.5 rounded-full font-bold">Expert</span>
+                                </div>
+                                <div class="w-full bg-slate-800/80 rounded-full h-2 overflow-hidden mt-2">
+                                    <div class="bg-gradient-to-r from-teal-400 to-emerald-400 h-full rounded-full" style="width: 95%"></div>
+                                </div>
+                                <p class="text-xs text-slate-300 mt-2">화려한 인터랙티브 그래픽, CSS 애니메이션, 디바이스 유연성에 특화된 마크업과 탄탄한 바닐라 제어를 구축합니다.</p>
+                            </div>
+
+                            <!-- Skill 2 -->
+                            <div class="glass-card p-4 rounded-xl">
+                                <div class="flex justify-between items-center mb-1">
+                                    <span class="font-bold text-white flex items-center gap-2">
+                                        <i class="fa-brands fa-react text-sky-400 animate-spin" style="animation-duration: 8s;"></i> React / Next.js
+                                    </span>
+                                    <span class="text-xs text-teal-300 bg-teal-950 px-2 py-0.5 rounded-full font-bold">Advanced</span>
+                                </div>
+                                <div class="w-full bg-slate-800/80 rounded-full h-2 overflow-hidden mt-2">
+                                    <div class="bg-gradient-to-r from-teal-400 to-emerald-400 h-full rounded-full" style="width: 88%"></div>
+                                </div>
+                                <p class="text-xs text-slate-300 mt-2">상태 관리(Redux, Zustand) 흐름과 컴포넌트 생명주기를 완벽히 활용해 깔끔한 비즈니스 로직과 렌더링 최적화를 완수합니다.</p>
+                            </div>
+
+                            <!-- Skill 3 -->
+                            <div class="glass-card p-4 rounded-xl">
+                                <div class="flex justify-between items-center mb-1">
+                                    <span class="font-bold text-white flex items-center gap-2">
+                                        <i class="fa-solid fa-wind text-blue-400"></i> Tailwind CSS & UI Design Token
+                                    </span>
+                                    <span class="text-xs text-teal-300 bg-teal-950 px-2 py-0.5 rounded-full font-bold">Expert</span>
+                                </div>
+                                <div class="w-full bg-slate-800/80 rounded-full h-2 overflow-hidden mt-2">
+                                    <div class="bg-gradient-to-r from-teal-400 to-emerald-400 h-full rounded-full" style="width: 92%"></div>
+                                </div>
+                                <p class="text-xs text-slate-300 mt-2">모던 유틸리티 기법을 정통하여 매우 신속하고 정갈한 반응형 페이지 및 하이엔드 테마 스타일링이 가능합니다.</p>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                // Planet 4: Animal
+                category: "4. 동물 행성",
+                color: "bg-planetAnimal",
+                themeText: "text-emerald-300",
+                themeBorder: "border-emerald-500/20",
+                themeBg: "bg-emerald-500/10",
+                html: `
+                    <div class="space-y-6">
+                        <div class="flex items-center gap-4">
+                            <div class="w-16 h-16 rounded-full bg-gradient-to-tr from-emerald-400 to-teal-600 flex items-center justify-center text-3xl shadow-lg shadow-emerald-500/30">
+                                <i class="fa-solid fa-paw text-white"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl sm:text-3xl font-black text-white">행복 발전소 동물 구역</h3>
+                                <p class="text-emerald-300 font-semibold text-sm">마음을 무장해제 시키는 사랑스러운 생명체들</p>
+                            </div>
+                        </div>
+
+                        <p class="text-slate-200 leading-relaxed">
+                            동물이 주는 순수함과 긍정적인 에너지는 저의 삶에 아주 큰 영감이 되어줍니다. 반려동물과 동물을 좋아하시는 분들이라면 언제든지 사진 배틀 대환영입니다!
+                        </p>
+
+                        <!-- Animal Profiles with visual style -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <!-- Animal 1: Cat -->
+                            <div class="glass-card p-5 rounded-2xl border-l-4 border-emerald-400">
+                                <span class="text-2xl">🐱</span>
+                                <h4 class="text-lg font-bold text-white mt-2">길고양이 수호천사</h4>
+                                <p class="text-sm text-slate-300 mt-1 leading-relaxed">
+                                    길고양이들의 평화로운 묘생을 열렬히 수호합니다. 길가다 귀여운 고양이를 마주치면 가방 속 간식을 꺼내는 참새 같은 습관이 있어요. 길가다 고양이를 발견하셨다면 저에게 슬랙으로 제보해주세요!
+                                </p>
+                            </div>
+
+                            <!-- Animal 2: Dog -->
+                            <div class="glass-card p-5 rounded-2xl border-l-4 border-teal-400">
+                                <span class="text-2xl">🐶</span>
+                                <h4 class="text-lg font-bold text-white mt-2">본가 힐링 메이커 '초코'</h4>
+                                <p class="text-sm text-slate-300 mt-1 leading-relaxed">
+                                    본가에서 살고 있는 6살 시츄 강아지 '초코'가 제 수호펫입니다. 주말마다 부모님이 찍어 보내주시는 엉뚱한 자세의 초코 사진을 들여다보는 것이 제 인생의 가장 큰 충전이자 마음 치유 비법이에요.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Mini Interactive Notice -->
+                        <div class="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-center text-sm text-slate-300">
+                            🐈 <strong>"반려동물 슬랙 채널(#pet-love)이 활성화되기를 언제나 꿈꾸고 있어요!"</strong>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                // Planet 5: Other
+                category: "5. 자유 행성",
+                color: "bg-planetOther",
+                themeText: "text-purple-300",
+                themeBorder: "border-purple-500/20",
+                themeBg: "bg-purple-500/10",
+                html: `
+                    <div class="space-y-6">
+                        <div class="flex items-center gap-4">
+                            <div class="w-16 h-16 rounded-full bg-gradient-to-tr from-fuchsia-400 to-violet-600 flex items-center justify-center text-3xl shadow-lg shadow-purple-500/30">
+                                <i class="fa-solid fa-comment-dots text-white"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl sm:text-3xl font-black text-white">소소한 비밀 궤도</h3>
+                                <p class="text-purple-300 font-semibold text-sm">동료 여러분을 위해 준비한 프리토크</p>
+                            </div>
+                        </div>
+
+                        <p class="text-slate-200 leading-relaxed">
+                            동료분들과의 유대감을 소중하게 생각합니다! 저의 소소하지만 알아두면 쏠쏠하게 이득이 되는 일상 기믹들을 여러분들께만 전해드릴게요.
+                        </p>
+
+                        <!-- Fun Fact Cards -->
+                        <div class="space-y-3">
+                            <div class="glass-card p-4 rounded-xl flex gap-3 items-center">
+                                <span class="text-xl">🗺️</span>
+                                <div>
+                                    <h4 class="font-bold text-white">인생 맛집 요정 출동 대기</h4>
+                                    <p class="text-xs text-slate-300 mt-0.5">회사 주변 및 핫플레이스 점심/저녁용 숨겨진 맛집 리스트 구글 지도가 상시 탑재되어 있으니, 오늘 메뉴 고르기가 도통 귀찮으실 때는 저를 편하게 호출해 주세요!</p>
+                                </div>
+                            </div>
+
+                            <div class="glass-card p-4 rounded-xl flex gap-3 items-center">
+                                <span class="text-xl">🎵</span>
+                                <div>
+                                    <h4 class="font-bold text-white">개발용 딥포커스 플리 공유</h4>
+                                    <p class="text-xs text-slate-300 mt-0.5">집중해서 코드를 짜야 할 때, 잡소리를 차단하는 최고의 신비로운 로파이(Lo-Fi) 혹은 코딩 전용 다크 신스웨이브 플리를 항시 공유 가능합니다.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Closing Message with Warm Heart -->
+                        <div class="p-6 rounded-2xl bg-purple-500/10 border border-purple-500/20 space-y-3">
+                            <h4 class="font-bold text-purple-200 flex items-center gap-2">
+                                <i class="fa-solid fa-paper-plane"></i>
+                                우리 소중한 팀원분들에게
+                            </h4>
+                            <p class="text-sm text-slate-300 leading-relaxed">
+                                "비슷한 듯 다른 각자의 궤도를 돌면서, 우리 하나의 거대한 프로젝트 은하를 함께 빛내 가고 있는 것 같아요. 항상 서로를 배려해 주시고 힘내주셔서 언제나 든든한 동경의 마음을 가지고 있답니다. 일하시다 힘들 땐 언제든 커피 한잔 가볍게 똑똑 노크해 주시길 바랄게요! 잘 부탁드립니다. 감사합니다!"
+                            </p>
+                        </div>
+                    </div>
+                `
+            }
+        ];
+
+        // 1. Star Background rendering inside Canvas
+        const canvas = document.getElementById('stars-canvas');
+        const ctx = canvas.getContext('2d');
+
+        let stars = [];
+        const numStars = 150;
+
+        function initStars() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            stars = [];
+            for (let i = 0; i < numStars; i++) {
+                stars.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    radius: Math.random() * 1.5 + 0.5,
+                    alpha: Math.random(),
+                    speed: Math.random() * 0.02 + 0.005,
+                    color: i % 5 === 0 ? '#38bdf8' : (i % 7 === 0 ? '#c084fc' : '#ffffff')
+                });
+            }
+        }
+
+        function drawStars() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < stars.length; i++) {
+                let star = stars[i];
+                star.alpha += star.speed;
+                if (star.alpha > 1 || star.alpha < 0) {
+                    star.speed = -star.speed;
+                }
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+                ctx.fillStyle = star.color;
+                ctx.globalAlpha = Math.max(0.1, Math.min(1, star.alpha));
+                ctx.fill();
+            }
+            ctx.globalAlpha = 1.0;
+            requestAnimationFrame(drawStars);
+        }
+
+        window.addEventListener('resize', initStars);
+
+        // Initialize Star System on Window Load
+        window.onload = function() {
+            initStars();
+            drawStars();
+        };
+
+        let currentPlanetIndex = null;
+
+        function zoomToPlanet(planetId, index) {
+            const galaxyContainer = document.getElementById('galaxy-container');
+            const detailOverlay = document.getElementById('detail-overlay');
+            const detailBackdrop = document.getElementById('detail-backdrop');
+            const detailPanel = document.getElementById('detail-panel');
+            const panelColorIndicator = document.getElementById('panel-color-indicator');
+            const panelCategory = document.getElementById('panel-category');
+            const panelContent = document.getElementById('panel-content');
+
+            currentPlanetIndex = index;
+            const data = planetsData[index];
+
+            // 1. Scale and translate the entire galaxy to simulate camera fly-in focus
+            const planetBtns = document.querySelectorAll('.planet-btn');
+            const targetButton = planetBtns[index];
+            const containerRect = galaxyContainer.getBoundingClientRect();
+            const buttonRect = targetButton.getBoundingClientRect();
+
+            // Calculate exact translation offset to center the clicked planet
+            const centerX = containerRect.left + containerRect.width / 2;
+            const centerY = containerRect.top + containerRect.height / 2;
+            const targetX = buttonRect.left + buttonRect.width / 2;
+            const targetY = buttonRect.top + buttonRect.height / 2;
+
+            const dx = centerX - targetX;
+            const dy = centerY - targetY;
+
+            // Adjust scale factor down since baseline planet sizes are now 2x larger
+            const scaleFactor = window.innerWidth < 768 ? 1.3 : 1.6;
+            galaxyContainer.style.transform = `translate(${dx}px, ${dy}px) scale(${scaleFactor})`;
+
+            // Fade out other planets visually to heighten focus
+            planetBtns.forEach((btn, i) => {
+                if (i !== index) {
+                    btn.style.opacity = '0.08';
+                    btn.style.pointerEvents = 'none';
+                }
+            });
+
+            // 2. Open Detail Glass Panel
+            detailOverlay.classList.remove('pointer-events-none');
+            
+            // Activate Backdrop
+            detailBackdrop.classList.remove('pointer-events-none');
+            detailBackdrop.classList.replace('opacity-0', 'opacity-100');
+
+            // Set content and styles in panel
+            panelColorIndicator.className = `w-4 h-4 rounded-full animate-pulse ${data.color}`;
+            panelCategory.innerText = data.category;
+            panelContent.innerHTML = data.html;
+
+            // Reset scroll of details to top
+            panelContent.scrollTop = 0;
+
+            // Slide In drawer smoothly
+            setTimeout(() => {
+                detailPanel.classList.remove('translate-y-full', 'md:translate-x-full');
+            }, 150);
+        }
+
+        function resetZoom() {
+            const galaxyContainer = document.getElementById('galaxy-container');
+            const detailOverlay = document.getElementById('detail-overlay');
+            const detailBackdrop = document.getElementById('detail-backdrop');
+            const detailPanel = document.getElementById('detail-panel');
+
+            // 1. Reset Galaxy Position
+            galaxyContainer.style.transform = 'translate(0px, 0px) scale(1)';
+
+            // Restore other planets visibility
+            const planetBtns = document.querySelectorAll('.planet-btn');
+            planetBtns.forEach((btn) => {
+                btn.style.opacity = '1';
+                btn.style.pointerEvents = 'auto';
+            });
+
+            // 2. Slide Out Drawer
+            detailPanel.classList.add('translate-y-full', 'md:translate-x-full');
+            
+            // Fade out backdrop
+            detailBackdrop.classList.replace('opacity-100', 'opacity-0');
+            detailBackdrop.classList.add('pointer-events-none');
+
+            // Lock click actions during transition
+            setTimeout(() => {
+                detailOverlay.classList.add('pointer-events-none');
+                currentPlanetIndex = null;
+            }, 500);
+        }
+
+        // Close details on ESC key
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && currentPlanetIndex !== null) {
+                resetZoom();
+            }
+        });
+    </script>
+</body>
+</html>
